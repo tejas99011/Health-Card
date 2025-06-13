@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Health Card Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .auth-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .role-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .role-btn {
+            padding: 12px 24px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .role-btn.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .search-section {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #667eea;
+        }
+
+        .search-btn {
+            padding: 15px 25px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .feature-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .feature-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            background: white;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .btn.secondary {
+            background: #f8f9fa;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn.secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .health-card {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        .health-card h3 {
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .health-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .info-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .qr-section {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+        }
+
+        .qr-code {
+            width: 150px;
+            height: 150px;
+            background: white;
+            margin: 0 auto 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .emergency-banner {
+            background: #ff4757;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .access-restricted {
+            background: #ffa502;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .role-selector {
+                flex-direction: column;
+            }
+            
+            .role-btn {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 Digital Health Card</h1>
+            <p>Secure, accessible healthcare information at your fingertips</p>
+        </div>
+
+        <div class="auth-section">
+            <h2>Access Portal</h2>
+            <div class="role-selector">
+                <button class="role-btn active" value="patient" onclick="setRole(event)">👤 Patient</button>
+                <button class="role-btn" value="family" onclick="setRole(event)">👨‍👩‍👧‍👦 Family</button>
+                <button class="role-btn" value="emergency" onclick="setRole(event)">🚨 Emergency</button>
+            </div>
+            <div class="search-section">
+                <input type="text" class="search-input" placeholder="Enter patient ID or search..." id="searchInput">
+                <button class="search-btn" onclick="searchPatient()">🔍 Search</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Patient Dashboard -->
+            <div id="patientDashboard" class="feature-card">
+                <div class="feature-icon">👤</div>
+                <h3 class="feature-title">Create Health Profile</h3>
+                <p class="feature-description">Set up your personal digital health card with essential medical information.</p>
+                
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" id="patientName" placeholder="Enter full name">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Date of Birth</label>
+                    <input type="date" class="form-input" id="patientDob">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Blood Group</label>
+                    <select class="form-select" id="bloodGroup">
+                        <option value="">Select Blood Group</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Gender</label>
+                    <select class="form-select" id="gender">
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <button class="btn" onclick="saveBasicInfo()">Save Basic Info</button>
+            </div>
+
+            <!-- Medical Information -->
+            <div id="medicalInfo" class="feature-card">
+                <div class="feature-icon">🏥</div>
+                <h3 class="feature-title">Medical Information</h3>
+                <p class="feature-description">Add allergies, conditions, and emergency contacts.</p>
+                
+                <div class="form-group">
+                    <label class="form-label">Known Allergies</label>
+                    <textarea class="form-textarea" id="allergies" placeholder="List any known allergies..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Medical Conditions</label>
+                    <textarea class="form-textarea" id="conditions" placeholder="Existing conditions (diabetes, asthma, etc.)..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Emergency Contact Name</label>
+                    <input type="text" class="form-input" id="emergencyName" placeholder="Emergency contact name">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Emergency Contact Phone</label>
+                    <input type="tel" class="form-input" id="emergencyPhone" placeholder="Emergency contact phone">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Relationship</label>
+                    <input type="text" class="form-input" id="emergencyRelation" placeholder="Relationship to patient">
+                </div>
+                
+                <button class="btn" onclick="saveMedicalInfo()">Save Medical Info</button>
+            </div>
+
+            <!-- Medical History -->
+            <div id="medicalHistory" class="feature-card">
+                <div class="feature-icon">📋</div>
+                <h3 class="feature-title">Medical History</h3>
+                <p class="feature-description">Track doctor visits, medications, and test results.</p>
+                
+                <div class="form-group">
+                    <label class="form-label">Doctor Visit</label>
+                    <input type="text" class="form-input" id="doctorName" placeholder="Doctor name">
+                    <input type="date" class="form-input" id="visitDate" style="margin-top: 10px;">
+                    <textarea class="form-textarea" id="visitNotes" placeholder="Visit notes..." style="margin-top: 10px;"></textarea>
+                </div>
+                
+                <button class="btn secondary" onclick="addVisit()">Add Visit</button>
+                
+                <div class="form-group" style="margin-top: 20px;">
+                    <label class="form-label">Current Medication</label>
+                    <input type="text" class="form-input" id="medicationName" placeholder="Medication name">
+                    <input type="text" class="form-input" id="dosage" placeholder="Dosage" style="margin-top: 10px;">
+                    <input type="date" class="form-input" id="medicationDate" style="margin-top: 10px;">
+                </div>
+                
+                <button class="btn secondary" onclick="addMedication()">Add Medication</button>
+                
+                <div class="form-group" style="margin-top: 20px;">
+                    <label class="form-label">Test Results</label>
+                    <input type="text" class="form-input" id="testName" placeholder="Test name">
+                    <input type="date" class="form-input" id="testDate" style="margin-top: 10px;">
+                    <input type="file" class="form-input" id="testFile" style="margin-top: 10px;">
+                </div>
+                
+                <button class="btn secondary" onclick="addTest()">Add Test</button>
+            </div>
+
+            <!-- Health Card Display -->
+            <div id="healthCardDisplay" class="feature-card">
+                <div class="feature-icon">💳</div>
+                <h3 class="feature-title">Your Health Card</h3>
+                <p class="feature-description">View, export, and share your digital health card.</p>
+                
+                <div id="healthCard" class="health-card hidden">
+                    <h3>Digital Health Card</h3>
+                    <div class="health-info" id="healthInfo">
+                        <!-- Health info will be populated here -->
+                    </div>
+                    
+                    <div class="qr-section">
+                        <div class="qr-code">QR Code</div>
+                        <p>Scan for emergency access</p>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="generateHealthCard()">Generate Health Card</button>
+                <button class="btn secondary" onclick="exportToPDF()">Export to PDF</button>
+            </div>
+
+            <!-- QR Code Generator -->
+            <div id="qrGenerator" class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3 class="feature-title">QR Code Generator</h3>
+                <p class="feature-description">Generate QR codes for different access levels and sharing options.</p>
+                
+                <div class="form-group">
+                    <label class="form-label">QR Code Type</label>
+                    <select class="form-select" id="qrType">
+                        <option value="emergency">Emergency Access (Blood Group, Allergies, Emergency Contact)</option>
+                        <option value="basic">Basic Info (Name, DOB, Blood Group)</option>
+                        <option value="full">Full Health Card (Patient Access Required)</option>
+                        <option value="family">Family Access Link</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Expiry Time (Optional)</label>
+                    <select class="form-select" id="qrExpiry">
+                        <option value="never">Never Expires</option>
+                        <option value="1hour">1 Hour</option>
+                        <option value="24hours">24 Hours</option>
+                        <option value="7days">7 Days</option>
+                        <option value="30days">30 Days</option>
+                    </select>
+                </div>
+                
+                <button class="btn" onclick="generateQRCode()">Generate QR Code</button>
+                
+                <div id="qrDisplay" class="qr-section hidden" style="background: white; margin-top: 20px; border-radius: 15px; padding: 20px;">
+                    <div id="qrCodeCanvas" class="qr-code" style="background: #f8f9fa; border: 2px dashed #667eea; color: #667eea; font-size: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 15px;">
+                        <div style="font-size: 48px; margin-bottom: 10px;">📱</div>
+                        <div>Click Generate to create QR code</div>
+                    </div>
+                    <div id="qrInfo" style="color: #666; font-size: 14px;"></div>
+                    <button class="btn secondary" onclick="downloadQR()" style="margin-top: 15px;">Download QR Code</button>
+                    <button class="btn secondary" onclick="shareQR()" style="margin-top: 10px;">Share QR Code</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emergency Access View -->
+        <div id="emergencyView" class="hidden">
+            <div class="emergency-banner">
+                🚨 EMERGENCY ACCESS MODE
+            </div>
+            <div class="feature-card">
+                <h3>Emergency Medical Information</h3>
+                <div class="access-restricted">
+                    Limited access view - Essential information only
+                </div>
+                <div id="emergencyInfo">
+                    <!-- Emergency info will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Family Access View -->
+        <div id="familyView" class="hidden">
+            <div class="feature-card">
+                <h3>Family Access - Read Only</h3>
+                <div class="access-restricted">
+                    Read-only access to health information
+                </div>
+                <div id="familyInfo">
+                    <!-- Family accessible info will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="pdf-qr.js"></script>
+    <script>
+        // Wait for all scripts to load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize the application
+            showRoleBasedContent('patient');
+        });
+    </script>
+    <script>
+        (function() {
+            'use strict';
+
+            let currentRole = 'patient';
+            let patientData = {
+                basicInfo: {},
+                medicalInfo: {},
+                history: {
+                    visits: [],
+                    medications: [],
+                    tests: []
+                }
+            };
+
+            function setRole(event) {
+                const role = event.currentTarget.value;
+                currentRole = role;
+                
+                // Update active role button
+                document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active'));
+                event.currentTarget.classList.add('active');
+                
+                // Show/hide appropriate sections
+                showRoleBasedContent(role);
+            }
+
+            function showRoleBasedContent(role) {
+                // Hide all views
+                document.getElementById('patientDashboard').style.display = role === 'patient' ? 'block' : 'none';
+                document.getElementById('medicalInfo').style.display = role === 'patient' ? 'block' : 'none';
+                document.getElementById('medicalHistory').style.display = role === 'patient' ? 'block' : 'none';
+                document.getElementById('healthCardDisplay').style.display = role === 'patient' ? 'block' : 'none';
+                document.getElementById('qrGenerator').style.display = role === 'patient' ? 'block' : 'none';
+                document.getElementById('emergencyView').style.display = role === 'emergency' ? 'block' : 'none';
+                document.getElementById('familyView').style.display = role === 'family' ? 'block' : 'none';
+            }
+
+            function searchPatient() {
+                const searchTerm = document.getElementById('searchInput').value;
+                if (searchTerm.trim()) {
+                    alert(`Searching for: ${searchTerm}\n(In a real system, this would query the database)`);
+                    
+                    // Simulate loading patient data for demo
+                    if (currentRole === 'emergency') {
+                        showEmergencyInfo();
+                    } else if (currentRole === 'family') {
+                        showFamilyInfo();
+                    }
+                }
+            }
+
+            function saveBasicInfo() {
+                patientData.basicInfo = {
+                    name: document.getElementById('patientName').value,
+                    dob: document.getElementById('patientDob').value,
+                    bloodGroup: document.getElementById('bloodGroup').value,
+                    gender: document.getElementById('gender').value
+                };
+                alert('Basic information saved successfully!');
+            }
+
+            function saveMedicalInfo() {
+                patientData.medicalInfo = {
+                    allergies: document.getElementById('allergies').value,
+                    conditions: document.getElementById('conditions').value,
+                    emergencyContact: {
+                        name: document.getElementById('emergencyName').value,
+                        phone: document.getElementById('emergencyPhone').value,
+                        relation: document.getElementById('emergencyRelation').value
+                    }
+                };
+                alert('Medical information saved successfully!');
+            }
+
+            function addVisit() {
+                const visit = {
+                    doctor: document.getElementById('doctorName').value,
+                    date: document.getElementById('visitDate').value,
+                    notes: document.getElementById('visitNotes').value
+                };
+                
+                if (visit.doctor && visit.date) {
+                    patientData.history.visits.push(visit);
+                    alert('Doctor visit added successfully!');
+                    
+                    // Clear form
+                    document.getElementById('doctorName').value = '';
+                    document.getElementById('visitDate').value = '';
+                    document.getElementById('visitNotes').value = '';
+                }
+            }
+
+            function addMedication() {
+                const medication = {
+                    name: document.getElementById('medicationName').value,
+                    dosage: document.getElementById('dosage').value,
+                    date: document.getElementById('medicationDate').value
+                };
+                
+                if (medication.name && medication.dosage) {
+                    patientData.history.medications.push(medication);
+                    alert('Medication added successfully!');
+                    
+                    // Clear form
+                    document.getElementById('medicationName').value = '';
+                    document.getElementById('dosage').value = '';
+                    document.getElementById('medicationDate').value = '';
+                }
+            }
+
+            function addTest() {
+                const test = {
+                    name: document.getElementById('testName').value,
+                    date: document.getElementById('testDate').value,
+                    file: document.getElementById('testFile').files[0]?.name || 'No file'
+                };
+                
+                if (test.name && test.date) {
+                    patientData.history.tests.push(test);
+                    alert('Test result added successfully!');
+                    
+                    // Clear form
+                    document.getElementById('testName').value = '';
+                    document.getElementById('testDate').value = '';
+                    document.getElementById('testFile').value = '';
+                }
+            }
+
+            function generateHealthCard() {
+                const { basicInfo, medicalInfo } = patientData;
+                
+                if (!basicInfo.name) {
+                    alert('Please fill in basic information first!');
+                    return;
+                }
+                
+                const healthCard = document.getElementById('healthCard');
+                const healthInfo = document.getElementById('healthInfo');
+                
+                healthInfo.innerHTML = `
+                    <div class="info-item">
+                        <div class="info-label">Name</div>
+                        <div class="info-value">${basicInfo.name || 'Not specified'}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Blood Group</div>
+                        <div class="info-value">${basicInfo.bloodGroup || 'Not specified'}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Date of Birth</div>
+                        <div class="info-value">${basicInfo.dob || 'Not specified'}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Gender</div>
+                        <div class="info-value">${basicInfo.gender || 'Not specified'}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Allergies</div>
+                        <div class="info-value">${medicalInfo.allergies || 'None listed'}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Conditions</div>
+                        <div class="info-value">${medicalInfo.conditions || 'None listed'}</div>
+                    </div>
+                `;
+                
+                healthCard.classList.remove('hidden');
+            }
+
+            function exportToPDF() {
+                const { basicInfo, medicalInfo, history } = patientData;
+                
+                if (!basicInfo.name) {
+                    alert('Please fill in basic information first!');
+                    return;
+                }
+                
+                // Prepare data for PDF generation
+                const pdfData = {
+                    name: basicInfo.name,
+                    age: calculateAge(basicInfo.dob),
+                    gender: basicInfo.gender,
+                    bloodGroup: basicInfo.bloodGroup,
+                    allergies: medicalInfo.allergies,
+                    conditions: medicalInfo.conditions,
+                    emergencyContact: medicalInfo.emergencyContact,
+                    medications: history.medications,
+                    visits: history.visits,
+                    tests: history.tests
+                };
+                
+                try {
+                    generatePDF(pdfData);
+                    alert('PDF generated successfully!');
+                } catch (error) {
+                    console.error('Error generating PDF:', error);
+                    alert('Failed to generate PDF');
+                }
+            }
+
+            function calculateAge(dob) {
+                if (!dob) return 'N/A';
+                const birthDate = new Date(dob);
+                const today = new Date();
+                let age = today.getFullYear() - birthDate.getFullYear();
+                const m = today.getMonth() - birthDate.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+                return age;
+            }
+
+            function generateQRCode() {
+                const qrType = document.getElementById('qrType').value;
+                const { basicInfo, medicalInfo } = patientData;
+                
+                if (!basicInfo.name) {
+                    alert('Please fill in basic information first!');
+                    return;
+                }
+                
+                let qrData = {};
+                let qrDescription = '';
+                
+                // Generate different QR code data based on type
+                switch(qrType) {
+                    case 'emergency':
+                        qrData = {
+                            type: 'emergency',
+                            bloodGroup: basicInfo.bloodGroup,
+                            allergies: medicalInfo.allergies,
+                            conditions: medicalInfo.conditions,
+                            emergencyContact: medicalInfo.emergencyContact,
+                            patientName: basicInfo.name
+                        };
+                        qrDescription = 'Emergency Access QR Code - Contains critical medical information';
+                        break;
+                        
+                    case 'basic':
+                        qrData = {
+                            type: 'basic',
+                            name: basicInfo.name,
+                            dob: basicInfo.dob,
+                            bloodGroup: basicInfo.bloodGroup,
+                            gender: basicInfo.gender
+                        };
+                        qrDescription = 'Basic Info QR Code - Contains basic patient information';
+                        break;
+                        
+                    case 'full':
+                        qrData = {
+                            type: 'full',
+                            patientData: patientData
+                        };
+                        qrDescription = 'Full Health Card QR Code - Requires patient access';
+                        break;
+                        
+                    case 'family':
+                        qrData = {
+                            type: 'family',
+                            patientId: basicInfo.name
+                        };
+                        qrDescription = 'Family Access QR Code - Read-only access';
+                        break;
+                }
+                
+                try {
+                    generateQRCode(qrData);
+                    const qrInfo = document.getElementById('qrInfo');
+                    if (qrInfo) {
+                        qrInfo.textContent = qrDescription;
+                    }
+                } catch (error) {
+                    console.error('Error generating QR code:', error);
+                    alert('Failed to generate QR code');
+                }
+            }
+
+            function generateQRPattern(data) {
+                // This creates a simple visual representation of a QR code
+                // In a real implementation, you'd use a proper QR code library
+                const patterns = ['█', '▄', '▀', '▌', '▐', '▆', '▇'];
+                let qrPattern = '';
+                
+                for(let i = 0; i < 15; i++) {
+                    for(let j = 0; j < 15; j++) {
+                        const random = Math.floor(Math.random() * patterns.length);
+                        qrPattern += patterns[random];
+                    }
+                    qrPattern += '<br>';
+                }
+                
+                return `<div style="font-family: monospace; font-size: 8px; line-height: 1; color: #333;">${qrPattern}</div>`;
+            }
+
+            function downloadQR() {
+                const qrType = document.getElementById('qrType').value;
+                const patientName = patientData.basicInfo.name || 'Patient';
+                
+                // In a real implementation, you'd generate and download the actual QR code image
+                alert(`QR Code would be downloaded as: ${patientName}_${qrType}_QR.png`);
+            }
+
+            function shareQR() {
+                const qrType = document.getElementById('qrType').value;
+                const patientName = patientData.basicInfo.name || 'Patient';
+                
+                if (navigator.share) {
+                    navigator.share({
+                        title: `${patientName} - Health Card QR Code`,
+                        text: `Health card QR code for ${qrType} access`,
+                        url: window.location.href
+                    });
+                } else {
+                    // Fallback for browsers that don't support Web Share API
+                    navigator.clipboard.writeText(window.location.href).then(() => {
+                        alert('QR code link copied to clipboard!');
+                    });
+                }
+            }
+
+            function showEmergencyInfo() {
+                const { basicInfo, medicalInfo } = patientData;
+                const emergencyInfo = document.getElementById('emergencyInfo');
+                
+                emergencyInfo.innerHTML = `
+                    <div class="health-info">
+                        <div class="info-item" style="background: #ff4757; color: white;">
+                            <div class="info-label">Blood Group</div>
+                            <div class="info-value">${basicInfo.bloodGroup || 'Unknown'}</div>
+                        </div>
+                        <div class="info-item" style="background: #ff4757; color: white;">
+                            <div class="info-label">Critical Allergies</div>
+                            <div class="info-value">${medicalInfo.allergies || 'None listed'}</div>
+                        </div>
+                        <div class="info-item" style="background: #ff4757; color: white;">
+                            <div class="info-label">Medical Conditions</div>
+                            <div class="info-value">${medicalInfo.conditions || 'None listed'}</div>
+                        </div>
+                        <div class="info-item" style="background: #2ed573; color: white;">
+                            <div class="info-label">Emergency Contact</div>
+                            <div class="info-value">${medicalInfo.emergencyContact?.name || 'Not specified'}<br>
+                            ${medicalInfo.emergencyContact?.phone || 'No phone'}</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            function showFamilyInfo() {
+                const { basicInfo, medicalInfo, history } = patientData;
+                const familyInfo = document.getElementById('familyInfo');
+                
+                familyInfo.innerHTML = `
+                    <div class="health-info">
+                        <div class="info-item">
+                            <div class="info-label">Name</div>
+                            <div class="info-value">${basicInfo.name || 'Not specified'}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Recent Medications</div>
+                            <div class="info-value">${history.medications.length} medications tracked</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Doctor Visits</div>
+                            <div class="info-value">${history.visits.length} visits logged</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Test Results</div>
+                            <div class="info-value">${history.tests.length} tests on file</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Initialize the application
+            showRoleBasedContent('patient');
+        })();
+    </script>
+</body>
+</html>
